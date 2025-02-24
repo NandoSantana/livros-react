@@ -1,64 +1,57 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Livro;
 use Illuminate\Http\Request;
 
 class LivroController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    public function index(Request $request)
     {
-        //
+        $query = Livro::query();
+        if ($request->has('search')) {
+            $query->where('titulo', 'like', "%{$request->search}%"); // Filtro por titulo
+        }
+        return $query->paginate(10);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function show(Livro $livro)
     {
-        //
+        return response()->json($livro);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'titulo' => 'required|string|max:255',
+            'autor' => 'required|string|max:255',
+            'descricao' => 'nullable|string',
+            'editora' => 'nullable|string|max:255',
+            'ano_publicacao' => 'nullable|integer',
+        ]);
+
+        $livro = Livro::create($request->all());
+        return response()->json($livro, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function update(Request $request, Livro $livro)
     {
-        //
+        $request->validate([
+            'titulo' => 'sometimes|required|string|max:255',
+            'autor' => 'sometimes|required|string|max:255',
+            'descricao' => 'nullable|string',
+            'editora' => 'nullable|string|max:255',
+            'ano_publicacao' => 'nullable|integer',
+        ]);
+
+        $livro->update($request->all());
+        return response()->json($livro);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function destroy(Livro $livro)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $livro->delete();
+        return response()->json(null, 204);
     }
 }
