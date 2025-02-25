@@ -12,7 +12,10 @@
   color: rgba(255, 255, 255, 0.87);
   background-color: #26213d;
   /* background-color:#000; */
-
+  background: linear-gradient(to bottom, #2b2b2b4b, #26213d);
+  /* background-repeat: none; */
+  background-repeat: repeat-x;
+  height: 100%;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -49,6 +52,7 @@ button {
   font-weight: 500;
   font-family: inherit;
   background-color: #1a1a1a;
+
   cursor: pointer;
   transition: border-color 0.25s;
 }
