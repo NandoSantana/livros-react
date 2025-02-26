@@ -1,6 +1,7 @@
 import { Description, Dialog, DialogPanel, DialogTitle, DialogBackdrop } from '@headlessui/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
+import {LivroService} from '../services/LivroService'
 <style>
 
 
@@ -43,7 +44,7 @@ export default function Insert(isOpened) {
                 <p>Are you sure you want to deactivate your account? All of your data will be permanently removed.</p>
                 <div className="flex gap-4">
                   <button onClick={() => setIsOpen(false)}>Cancel</button>
-                  <button onClick={() => setIsOpen(false)}>Deactivate</button>
+                  <button onClick={() => adicionaLivro(false)}>Adicionar</button>
                 </div>
               </DialogPanel>
             </div>

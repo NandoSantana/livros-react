@@ -52,7 +52,12 @@ export default function App() {
   };
 
   return (
+ 
     <div className="p-4">
+      <left>
+        <img src="books.png" width={100}/>
+        <br/>
+      </left>
       <div className='grid grid-cols-2'>
    
           <input
@@ -67,8 +72,6 @@ export default function App() {
             onChange={(e) => setSearch(e.target.value)}
           />
           <Insert isOpened={isOpen}/>
-
-          
       </div>  
 
       <div className="w-full max-w-md px-4">
@@ -96,14 +99,12 @@ export default function App() {
                         <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
                           <PencilIcon className="size-4 fill-white/30" />
                           Edit
-                          <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-[focus]:inline">⌘E</kbd>
                         </button>
                       </MenuItem>
                       <MenuItem>
                         <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
                           <TrashIcon className="size-4 fill-white/30" />
                           Delete
-                          <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-[focus]:inline">⌘D</kbd>
                         </button>
                       </MenuItem>
                     </MenuItems>
