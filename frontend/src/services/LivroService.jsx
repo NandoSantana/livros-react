@@ -1,14 +1,22 @@
 export default function LivroService(url, data){
 
-    function insert(url, data){
+    function getOneBook(data){
         axios
-        .post(`http://127.0.0.1:8000/api/livros?search=${search}&page=${page}`)
+        .get(`http://127.0.0.1:8000/api/livros/${data.id}`, data)
         .then((res) => {
 
         });
     }
 
-    function edit(url, data){
+    function insert(data){
+        axios
+        .post(`http://127.0.0.1:8000/api/livros`, data)
+        .then((res) => {
+
+        });
+    }
+
+    function edit(data){
         axios
         .put(`http://127.0.0.1:8000/api/livros/${data.id}`)
         .then((res) => {
@@ -16,7 +24,7 @@ export default function LivroService(url, data){
         });
     }
 
-    function remove(url, data){
+    function remove(data){
         axios
         .delete(`http://127.0.0.1:8000/api/livros/${data.id}`)
         .then((res) => {

@@ -1,12 +1,12 @@
 // import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import Listing from './components/Listing'
+
 import { Description, Field, Input, Label } from '@headlessui/react'
 
 import { Fragment } from 'react'
 import clsx from 'clsx'
-import Example from './components/Example'
+
 import './App.css'
 import "tailwindcss";
 
@@ -14,6 +14,8 @@ import "tailwindcss";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Insert from './components/Insert';
+import Editing from './components/Editing';
+
 
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import {
@@ -31,8 +33,11 @@ export default function App() {
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false)
-
+  
   useEffect(() => {
+    if(search){
+      setPage(1);
+    }
     axios
       .get(`http://127.0.0.1:8000/api/livros?search=${search}&page=${page}`)
       .then((res) => {
@@ -40,14 +45,15 @@ export default function App() {
         setTotalPages(res.data.last_page);
         setCurrentPage(res.data.current_page);
       });
+
+
   }, [search, page, currentPage]);
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
-      console.log('page', page)
-      setTotalPages(page);
-      setCurrentPage(page);
+  
       setPage(page);
+      setIsOpen(isOpen)
     }
   };
 
@@ -59,7 +65,6 @@ export default function App() {
         <br/>
       </left>
       <div className='grid grid-cols-2'>
-   
           <input
             id='search'
             type="text"
@@ -86,7 +91,6 @@ export default function App() {
                     inline-flex items-center gap-2 rounded-md bg-gray-800 py-1.5 px-3 text-sm/6 font-semibold text-white 
                     shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-700 data-[open]:bg-gray-700 
                     data-[focus]:outline-1 data-[focus]:outline-white">
-                      ...
                       <ChevronDownIcon className="size-4 fill-white/60" />
                     </MenuButton>
 
@@ -96,10 +100,7 @@ export default function App() {
                       className="w-52 origin-top-right rounded-xl border border-white/5 bg-white/5 p-1 text-sm/6 text-white transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
                     >
                       <MenuItem >
-                        <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-                          <PencilIcon className="size-4 fill-white/30" />
-                          Edit
-                        </button>
+                        <Editing as={false, livro} />
                       </MenuItem>
                       <MenuItem>
                         <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
