@@ -15,11 +15,21 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Insert from './components/Insert';
 
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
+import {
+  ArchiveBoxXMarkIcon,
+  ChevronDownIcon,
+  PencilIcon,
+  Square2StackIcon,
+  TrashIcon,
+} from '@heroicons/react/16/solid'
+
 export default function App() {
   const [livros, setLivros] = useState([]);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
@@ -28,12 +38,22 @@ export default function App() {
       .then((res) => {
         setLivros(res.data.data);
         setTotalPages(res.data.last_page);
+        setCurrentPage(res.data.current_page);
       });
-  }, [search, page]);
+  }, [search, page, currentPage]);
+
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      console.log('page', page)
+      setTotalPages(page);
+      setCurrentPage(page);
+      setPage(page);
+    }
+  };
 
   return (
     <div className="p-4">
-      <div className='grid grid-cols-3'>
+      <div className='grid grid-cols-2'>
    
           <input
             id='search'
@@ -46,17 +66,7 @@ export default function App() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-    
-       
-          <button className="text-align-center w-full">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-5">
-              <path fillRule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clipRule="evenodd" />
-            </svg>
-            Procurar</button>
-          
-       
-         
-            <Insert isOpened={isOpen}/>
+          <Insert isOpened={isOpen}/>
 
           
       </div>  
@@ -65,7 +75,41 @@ export default function App() {
           </div>
             <ul className="border rounded p-4 bg-white shadow">
               {livros.map((livro) => (
-                <li key={livro.id} className="border-b py-2">{livro.titulo}</li>
+                <li key={livro.id} className="border-b py-2">
+                  {livro.titulo} - {livro.autor} - {livro.descricao} 
+                 
+                  <Menu>
+                    <MenuButton className="menuControls 
+                    inline-flex items-center gap-2 rounded-md bg-gray-800 py-1.5 px-3 text-sm/6 font-semibold text-white 
+                    shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-700 data-[open]:bg-gray-700 
+                    data-[focus]:outline-1 data-[focus]:outline-white">
+                      ...
+                      <ChevronDownIcon className="size-4 fill-white/60" />
+                    </MenuButton>
+
+                    <MenuItems
+                      transition
+                      anchor="bottom end"
+                      className="w-52 origin-top-right rounded-xl border border-white/5 bg-white/5 p-1 text-sm/6 text-white transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
+                    >
+                      <MenuItem >
+                        <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+                          <PencilIcon className="size-4 fill-white/30" />
+                          Edit
+                          <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-[focus]:inline">⌘E</kbd>
+                        </button>
+                      </MenuItem>
+                      <MenuItem>
+                        <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+                          <TrashIcon className="size-4 fill-white/30" />
+                          Delete
+                          <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-[focus]:inline">⌘D</kbd>
+                        </button>
+                      </MenuItem>
+                    </MenuItems>
+                  </Menu>
+                
+                </li>
               ))}
             </ul>
             <div className="flex justify-between mt-4">
@@ -76,7 +120,18 @@ export default function App() {
               >
                 Anterior
               </button>
-              <span>Página {page} de {totalPages}</span>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => handlePageChange(page)}
+                  className={`px-3 py-2 text-sm font-medium rounded ${
+                    currentPage === page ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+              
               <button
                 disabled={page === totalPages}
                 className="px-4 py-2 bg-gray-200 rounded"
@@ -84,7 +139,9 @@ export default function App() {
               >
                 Próximo
               </button>
+              
             </div>
+            <span>Página {page} de {totalPages}</span>
       </div>
   );
 }
