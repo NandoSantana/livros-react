@@ -15,6 +15,7 @@ run migrations and seeders
 PHP 8
 - php artisan migrate
 - php artisan db:seed --class=LivroSeeder
+- php artisan serve
 
 
 On folder frontend node -v 22
