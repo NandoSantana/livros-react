@@ -15,29 +15,36 @@ import {
 
 </style>
 export default function Editing(isOpened, livro) {
-    console.log('livro edit', isOpened.as, livro)
 
     let [isOpen, setIsOpen] = useState(false)
 
     // dados para envio
-    let [titulo, setTitulo] = useState('')
-    let [autor, setAutor] = useState('')
-    let [descricao, setDescricao] = useState('')
-    let [ano_publicacao, setAnoPublicacao] = useState('')
-    let [editora, setEditora] = useState('')
-
+    const [titulo, setTituloEdit] = useState('')
+    const [autor, setAutorEdit] = useState('')
+    const [descricao, setDescricaoEdit] = useState('')
+    const [ano_publicacao, setAnoPublicacaoEdit] = useState('')
+    const [editora, setEditoraEdit] = useState('')
+    
     if(isOpened == true){
         setIsOpen(true)
     }
+
+    // LivroService.getOne(isOpened.as.id).then(function(res){
+        // console.log('res',res)
+
+    // setTituloEdit(res.titulo);
+
+    // })
+
     function cancelAndClean(){
-      setTitulo('')
-      setDescricao('')
-      setAutor('')
-      setAnoPublicacao('')
-      setEditora('');
+      setTituloEdit('')
+      setDescricaoEdit('')
+      setAutorEdit('')
+      setAnoPublicacaoEdit('')
+      setEditoraEdit('');
       setIsOpen(false)
     }
-    function adicionaLivro(){
+    function editaLivro(){
       const dados = {
         "titulo" : titulo,
         "autor" : autor,
@@ -46,11 +53,13 @@ export default function Editing(isOpened, livro) {
         "ano_publicacao" : ano_publicacao
       }
 
-      var add = LivroService.Insert(dados);
+    //   var add = LivroService.Insert(dados);
 
       setIsOpen(false)
 
     }
+    // setTitulo(isOpened.as.titulo)
+
     return (
         <>
         {livro}
@@ -81,16 +90,19 @@ export default function Editing(isOpened, livro) {
                     >
                     
                     <DialogTitle className="text-lg font-bold">Adicione um livro</DialogTitle>
-                    <Field>
+                    
                         <br/>
                         Titulo:
                         <input 
-                        value={isOpened.as.titulo}
+                        value={titulo}
                         className={clsx(
                             'mt-3 block w-full rounded-lg border-none bg-white/10 py-1.5 px-3 text-sm/6 text-white',
                             'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
                         )}
-                        onChange={e => setTitulo(e.target.value)}
+
+                        
+
+                        onChange={e => setTituloEdit(e.target.value)}
                         /> 
                         <br/>
                         Autor:
@@ -100,17 +112,17 @@ export default function Editing(isOpened, livro) {
                             'mt-3 block w-full rounded-lg border-none bg-white/10 py-1.5 px-3 text-sm/6 text-white',
                             'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
                         )}
-                        onChange={e => WritableStreamDefaultController(e.target.value)}
+                        onChange={e => setAutorEdit(e.target.value)}
                         /> 
                          <br/>
                         Editora:
                         <input 
-                        value={isOpened.as.editora}
+                        value={isOpened.as?.editora}
                         className={clsx(
                             'mt-3 block w-full rounded-lg border-none bg-white/10 py-1.5 px-3 text-sm/6 text-white',
                             'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
                         )}
-                        onChange={e => WritableStreamDefaultController(e.target.value)}
+                        onChange={e => setEditoraEdit(e.target.value)}
                         /> 
                         <br/>
                         Descrição:
@@ -120,7 +132,7 @@ export default function Editing(isOpened, livro) {
                             'mt-3 block w-full rounded-lg border-none bg-white/10 py-1.5 px-3 text-sm/6 text-white',
                             'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
                         )}
-                        onChange={e => setDescricao(e.target.value)}
+                        onChange={e => setDescricaoEdit(e.target.value)}
                         /> 
                         <br/>
                         Ano de publicação:
@@ -131,10 +143,10 @@ export default function Editing(isOpened, livro) {
                             'mt-3 block w-full rounded-lg border-none bg-white/10 py-1.5 px-3 text-sm/6 text-white',
                             'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
                         )}
-                        onChange={e => setAnoPublicacao(e.target.value)}
+                        onChange={e => setAnoPublicacaoEdit(e.target.value)}
                         /> 
 
-                        </Field>
+                     
                         <br/>
                         <div className="flex gap-4">
                         <button onClick={() => cancelAndClean(false)}>Cancel</button>

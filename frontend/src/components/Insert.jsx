@@ -4,13 +4,8 @@ import { useState } from 'react'
 import  LivroService from '../services/LivroService'
 import clsx from 'clsx'
 
-<style>
-
-
-</style>
 export default function Insert(isOpened) {
   let [isOpen, setIsOpen] = useState(false)
-  
 
   // dados para envio
   let [titulo, setTitulo] = useState('')
@@ -93,9 +88,7 @@ export default function Insert(isOpened) {
                         )}
                         onChange={e => setAutor(e.target.value)}
                       /> 
-
-
-<br/>
+                      <br/>
                       Editora:
                       <input 
                         value={editora}
@@ -105,7 +98,6 @@ export default function Insert(isOpened) {
                         )}
                         onChange={e => setEditora(e.target.value)}
                       /> 
-
                       <br/>
                       Descrição:
                       <textarea 

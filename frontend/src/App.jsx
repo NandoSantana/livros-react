@@ -1,21 +1,11 @@
-// import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-
-import { Description, Field, Input, Label } from '@headlessui/react'
-
-import { Fragment } from 'react'
 import clsx from 'clsx'
-
 import './App.css'
 import "tailwindcss";
-
-// import { Button } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Insert from './components/Insert';
 import Editing from './components/Editing';
-
+import Removing from './components/Removing';
 
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import {
@@ -25,6 +15,8 @@ import {
   Square2StackIcon,
   TrashIcon,
 } from '@heroicons/react/16/solid'
+import LivroService from './services/LivroService';
+
 
 export default function App() {
   const [livros, setLivros] = useState([]);
@@ -49,12 +41,20 @@ export default function App() {
 
   }, [search, page, currentPage]);
 
+
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
   
       setPage(page);
       setIsOpen(isOpen)
     }
+  };
+  const handleRemove = (id) => {
+    console.log('hadle remove')
+    // LivroService.remove(id).then(() => {
+      console.log('handle active')
+      
+    // });
   };
 
   return (
@@ -103,10 +103,10 @@ export default function App() {
                         <Editing as={false, livro} />
                       </MenuItem>
                       <MenuItem>
-                        <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-                          <TrashIcon className="size-4 fill-white/30" />
-                          Delete
-                        </button>
+                        <Removing as={false, livro} onRemove={(id) => {
+                            setLivros(livros.filter((livro) => livro.id !== id));
+
+                        }}/>
                       </MenuItem>
                     </MenuItems>
                   </Menu>
